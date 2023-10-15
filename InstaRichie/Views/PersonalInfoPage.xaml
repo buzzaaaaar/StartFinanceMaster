@@ -1,0 +1,167 @@
+﻿<!--
+    Start Finance - An to manage your personal finances.
+    Copyright (C) 2016  Jijo Bose
+    Start Finance is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Start Finance is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Start Finance.  If not, see <http://www.gnu.org/licenses/>.
+
+    added by Kavindu Illankoon
+-->
+<Page
+    x:Class="StartFinance.Views.PersonalInfoPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:StartFinance.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Loaded="Page_Loaded"
+    xmlns:vm="using:StartFinance.ViewModels" xmlns:controls="using:Template10.Controls" mc:Ignorable="d">
+    <Page.Resources>
+        <DataTemplate x:Key="AssetListDatavalue">
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding ID}" Padding="0,0,15,0"/>
+                    <TextBlock Text="{Binding FirstName}" Padding="0,0,15,0"/>
+                    <TextBlock Text="{Binding LastName}" Padding="0,0,15,0"/>
+                    <TextBlock Text="{Binding DOB}" Padding="0,0,15,0"/>
+                    <TextBlock Text="{Binding EmailAddress}" Padding="0,0,15,0"/>
+                    <TextBlock Text="{Binding MobilePhone}" Padding="0,0,15,0"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <vm:MainPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
+    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                <VisualState x:Name="VisualStateNarrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for narrow view  -->
+                        <!--<Setter Target="AccDataGrid.(RelativePanel.Below)" Value="pageStart" />-->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateNormal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for normal view  -->
+                        <!--<Setter Target="AccDataGrid.(RelativePanel.RightOf)" Value="pageStart" />-->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateWide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for wide view  -->
+                        <!--<Setter Target="AccDataGrid.(RelativePanel.RightOf)" Value="pageStart" />-->
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <controls:PageHeader x:Name="pageHeader" RelativePanel.AlignLeftWithPanel="True"
+			RelativePanel.AlignRightWithPanel="True"
+			RelativePanel.AlignTopWithPanel="True" Text="Profile">
+
+            <!--  secondary commands  -->
+            <controls:PageHeader.SecondaryCommands>
+                <AppBarButton Click="{x:Bind ViewModel.GotoSettings}" Label="Settings" />
+                <AppBarButton Click="{x:Bind ViewModel.GotoPrivacy}" Label="Privacy" />
+                <AppBarButton Click="{x:Bind ViewModel.GotoAbout}" Label="About" />
+            </controls:PageHeader.SecondaryCommands>
+
+        </controls:PageHeader>
+
+        <controls:PageHeader x:Name="pageFooter" RelativePanel.AlignLeftWithPanel="True"
+			RelativePanel.AlignRightWithPanel="True"
+			RelativePanel.AlignBottomWithPanel="True">
+
+            <!--  secondary commands  -->
+            <controls:PageHeader.PrimaryCommands>
+                <AppBarButton Icon="Add" Label="Add Person" Click="AddInfo_Click" />
+                <AppBarButton Icon="Edit" Label="Edit Person" Click="EditInfo_Click"/>
+                <!--<AppBarButton Icon="Save" Label="Save Changes" Click="EditInfo_Click"/>-->
+                <AppBarButton Icon="Delete" Label="Delete Person" Click="DeleteInfo_Click" />
+                <AppBarButton Icon="Refresh" Label="Reset List" Click="ClearFields_Click"/>
+            </controls:PageHeader.PrimaryCommands>
+
+        </controls:PageHeader>
+
+        <!--  page content  -->
+        <Pivot>
+            <RelativePanel.Below>pageHeader</RelativePanel.Below>
+            <RelativePanel.Above>pageFooter</RelativePanel.Above>
+            <PivotItem Header="Personal Details ">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="400"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="pageStart" Grid.Row="0" VerticalAlignment="Top"
+                                HorizontalAlignment="Stretch"
+                                Orientation="Vertical" Margin="10,0,10,0">
+                        <TextBox x:Name="FirstNameText" PlaceholderText="Joe" Header="First Name"/>
+                        <TextBox x:Name="LastNameText" PlaceholderText="Johnson" Header="Last Name"/>
+                        <!-- DOB -->
+                        <DatePicker Name="DOBText"  Header="Date of Birth"
+                                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0"></DatePicker>
+                        <ComboBox x:Name="GenderText" PlaceholderText="Please Select your gender" PlaceholderForeground="Gray" Header="Gender">
+                            <ComboBoxItem Content="Female"></ComboBoxItem>
+                            <ComboBoxItem Content="Male"></ComboBoxItem>
+                            <ComboBoxItem Content="Other"></ComboBoxItem>
+                        </ComboBox>
+                        <TextBox x:Name="EmailText" PlaceholderText="Joe.Johnson@email.com" Header="Email Address"/>
+                        <TextBox x:Name="MobileText" PlaceholderText="00-000-000" TextWrapping="Wrap" InputScope="Number" Header="Mobile Number"/>
+                    </StackPanel>
+                    <ListView x:Name="PersonalInfoListView" Grid.Row="1" HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                ItemTemplate="{StaticResource AssetListDatavalue}" />
+                    <!-- SelectionChanged="PersonalInfoListView_SelectionChanged"-->
+                    <RelativePanel.Below>pageStart</RelativePanel.Below>
+
+                </Grid>
+            </PivotItem>
+        </Pivot>
+        <!--<Grid Width="300" x:Name="PageContent">
+            <RelativePanel.Below>pageHeader</RelativePanel.Below>
+            <StackPanel x:Name="pageStart" VerticalAlignment="Top"
+                                HorizontalAlignment="Stretch"
+                                Orientation="Vertical" Margin="10,0,10,0">
+                <TextBox x:Name="AssetNameText" Header="Asset Name"/>
+                <TextBox x:Name="AssetValue" TextWrapping="Wrap" InputScope="Number" Header="Asset Value"/>
+                -->
+        <!--<StackPanel Orientation="Horizontal">
+                    <Button x:Name="AddWish" Content="Add Account" Margin="0,20,0,0" Click="AddData"/>
+                    <Button x:Name="DeleteItem" Content="Delete Item" Margin="15,20,0,0" Click="DeleteAccout_Click"/>
+                </StackPanel>-->
+        <!--
+            </StackPanel>
+        </Grid>
+        <ListView x:Name="AssetListView" HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch" Height="350"
+                  RelativePanel.Below="PageContent"
+                  ItemTemplate="{StaticResource AssetListDatavalue}">
+            -->
+        <!--Add here-->
+        <!--
+        </ListView>-->
+
+
+    </RelativePanel>
+</Page>
